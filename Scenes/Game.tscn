@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://cl32jy727kw3s"]
+
+[ext_resource type="Texture2D" uid="uid://ft54i6qnny7d" path="res://Assets/Textures/Backgrounds/green.png" id="1_8ulv1"]
+[ext_resource type="Script" path="res://Scenes/game.gd" id="1_mdgba"]
+[ext_resource type="PackedScene" uid="uid://lm22hoovbbpk" path="res://Scenes/Card/Card.tscn" id="2_yxcxn"]
+[ext_resource type="Script" path="res://Scenes/CardHolder/card_holder.gd" id="4_7s7g4"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_mdgba")
+card_scene = ExtResource("2_yxcxn")
+
+[node name="Sprite2D" type="TextureRect" parent="."]
+offset_right = 1158.0
+offset_bottom = 652.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_8ulv1")
+
+[node name="CardHolder" type="Node2D" parent="."]
+position = Vector2(240, 228)
+script = ExtResource("4_7s7g4")
