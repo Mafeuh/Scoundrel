@@ -5,11 +5,8 @@ class_name Game
 
 @onready var card_holder: CardHolder = $CardHolder
 
-
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("spawn_card"):
-		var card = card_scene.instantiate()
+func _ready() -> void:
+	var card: Card = card_scene.instantiate()
+	card_holder.set_card(card)
 	
-		card.set_value('hearts', 'K')
-		
-		card_holder.card = card
+	card.set_value('hearts', 'J')

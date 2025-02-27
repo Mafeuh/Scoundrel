@@ -61,14 +61,27 @@ const CARDS_TEXTURES: Dictionary = {
 }
 
 @onready var card_texture: Sprite2D = $CardTexture
+@onready var hitbox: Control = $CardTexture/Hitbox
 
 var color: String
 var value: String
 
 var holder: CardHolder
 
+var velocity = Vector2.ZERO
+
 func set_value(color: String, value: String):
 	self.color = color
 	self.value = value
 	
-	# card_texture.texture = CARDS_TEXTURES.get(color).get(value)
+	if color in CARDS_TEXTURES.keys() and value in CARDS_TEXTURES.get(color):
+		card_texture.texture = CARDS_TEXTURES.get(color).get(value)
+	else:
+		card_texture.texture = preload("res://Assets/Textures/Cards/BaseCard.png")
+	
+	
+func _process(delta: float) -> void:
+	velocity = Vector2.ZERO
+	var distance_to_holder = sqrt((holder.position.x - position.x)**2 + (holder.position.y - position.y))
+	if distance_to_holder > 10:
+		velocity = Vector2()
