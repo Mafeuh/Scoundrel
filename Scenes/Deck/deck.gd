@@ -4,7 +4,6 @@ class_name Deck
 @export var card_texture: Texture2D
 @export var cards_count: int = 5
 @export var offset: Vector2 = Vector2(0, 6)
-@onready var cards_amount: Label = $Panel/MarginContainer/CardsAmount
 
 const CARD_SCENE = preload("res://Scenes/Card/Card.tscn")
 
@@ -45,4 +44,4 @@ func _ready() -> void:
 		var card = Sprite2D.new()
 		card.texture = card_texture
 		card.position = Vector2(0, - i * offset.y)
-		add_child(card)	
+		add_child(card)

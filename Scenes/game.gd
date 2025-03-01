@@ -34,6 +34,7 @@ var health: int:
 func new_weapon(new_weapon: Card):
 	if weapon_slots.size() > 0:
 		cards.remove_child(get_weapon_slot().remove_card())
+		reset_weapon()
 	
 	weapon_slots.clear()
 	for child: CardSlot in weapon_area.get_children():
@@ -63,6 +64,8 @@ func start_game() -> void:
 	deck = Deck.new()
 	
 	health = base_health
+	
+	reset_weapon()
 	
 	for card in cards.get_children():
 		cards.remove_child(card)
@@ -106,12 +109,12 @@ func use_card(card: Card):
 		if weapon_slot.has_card() and card.get_true_value() < get_last_enemy_value():
 			add_card_to_weapon_queue(card)
 		else:
-			cards.remove_child(card)
+			trash_card(card)
 	
 	if card.color == 'hearts':
 		var true_card_value: int = card.get_true_value()
 		health = min(base_health, health + true_card_value)
-		cards.remove_child(card)
+		trash_card(card)
 	
 	if drawing_slots.filter(func(slot): return slot.has_card()).size() == 1:
 		refill()
@@ -138,7 +141,7 @@ func refill():
 
 
 func get_weapon_strength() -> int:
-	if get_weapon_slot().card == null:
+	if get_weapon_slot() != null and get_weapon_slot().card == null:
 		return 0
 	else:
 		return get_weapon_slot().card.get_true_value()
@@ -172,7 +175,7 @@ func _on_drawing_slot_4_card_used(slot: ButtonCardSlot, card: Card) -> void:
 
 
 func get_weapon_slot():
-	return weapon_slots[0] if weapon_slots.size() > 0 else null
+	return weapon_slots[0] if weapon_slots.size() > 0 else CardSlot.new()
 
 
 func trash_card(card: Card):
@@ -184,3 +187,14 @@ func trash_card(card: Card):
 		slot.position.y = rng.randi_range(-10, 10)
 		card.holder = slot
 		slot.set_card(card)
+
+
+func reset_weapon():
+	for slot in weapon_slots:
+		trash_card(slot.card)
+		weapon_area.remove_child(slot)
+	weapon_slots.clear()
+	
+	var slot: CardSlot = CardSlot.new()
+	weapon_area.add_child(slot)
+	weapon_slots.append(slot)

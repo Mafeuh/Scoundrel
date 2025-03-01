@@ -11,7 +11,6 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_mdgba")
 card_scene = ExtResource("2_yxcxn")
-base_health = 100
 
 [node name="Sprite2D" type="TextureRect" parent="."]
 offset_right = 1920.0
