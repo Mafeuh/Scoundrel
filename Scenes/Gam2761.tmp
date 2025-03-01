@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ft54i6qnny7d" path="res://Assets/Textures/Backgrounds/green.png" id="1_8ulv1"]
 [ext_resource type="Script" path="res://Scenes/game.gd" id="1_mdgba"]
 [ext_resource type="PackedScene" uid="uid://lm22hoovbbpk" path="res://Scenes/Card/Card.tscn" id="2_yxcxn"]
-[ext_resource type="PackedScene" uid="uid://c7sxef2x0m655" path="res://Scenes/Deck/Deck.tscn" id="4_v21ev"]
+[ext_resource type="Script" path="res://Scenes/Deck/deck.gd" id="5_inpls"]
 [ext_resource type="PackedScene" uid="uid://da05cm8dyj15s" path="res://Scenes/CardSlot/CardSlot.tscn" id="6_6n1nc"]
 [ext_resource type="Texture2D" uid="uid://seebvu4fhju3" path="res://Assets/Textures/Cards/Back.png" id="6_au6bq"]
 [ext_resource type="PackedScene" uid="uid://csyq2aw6rm2fs" path="res://Scenes/ButtonCardSlot/ButtonCardSlot.tscn" id="6_ki7ov"]
@@ -27,8 +27,9 @@ offset_right = 511.0
 offset_bottom = 81.0
 text = "Start a game"
 
-[node name="Deck" parent="." instance=ExtResource("4_v21ev")]
-position = Vector2(124, 214)
+[node name="Deck" type="Node2D" parent="."]
+position = Vector2(110, 224)
+script = ExtResource("5_inpls")
 card_texture = ExtResource("6_au6bq")
 
 [node name="HealthLabel" type="Label" parent="."]
@@ -53,15 +54,11 @@ position = Vector2(300, 0)
 position = Vector2(450, 0)
 
 [node name="WeaponArea" type="Node2D" parent="."]
-position = Vector2(364, 731)
 
 [node name="CardSlot" parent="WeaponArea" instance=ExtResource("6_6n1nc")]
+position = Vector2(244, 767)
 
 [node name="Cards" type="Node2D" parent="."]
-position = Vector2(123, 179)
-
-[node name="Bin" type="Node2D" parent="."]
-position = Vector2(1131, 731)
 
 [connection signal="pressed" from="StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot" to="." method="_on_drawing_slot_card_used"]

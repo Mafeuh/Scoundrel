@@ -1,87 +1,85 @@
 extends Node2D
 class_name Card
 
-const CARDS_TEXTURES: Dictionary = {
-	'hearts': {
-		'2': preload("res://Assets/Textures/Cards/h2.png"),
-		'3': preload("res://Assets/Textures/Cards/h3.png"),
-		'4': preload("res://Assets/Textures/Cards/h4.png"),
-		'5': preload("res://Assets/Textures/Cards/h5.png"),
-		'6': preload("res://Assets/Textures/Cards/h6.png"),
-		'7': preload("res://Assets/Textures/Cards/h7.png"),
-		'8': preload("res://Assets/Textures/Cards/h8.png"),
-		'9': preload("res://Assets/Textures/Cards/h9.png"),
-		'10': preload("res://Assets/Textures/Cards/h10.png"),
-		'J': preload("res://Assets/Textures/Cards/hJ.png"),
-		'Q': preload("res://Assets/Textures/Cards/hQ.png"),
-		'K': preload("res://Assets/Textures/Cards/hK.png"),
-	},
-	'spades': {
-		'2': preload("res://Assets/Textures/Cards/s2.png"),
-		'3': preload("res://Assets/Textures/Cards/s3.png"),
-		'4': preload("res://Assets/Textures/Cards/s4.png"),
-		'5': preload("res://Assets/Textures/Cards/s5.png"),
-		'6': preload("res://Assets/Textures/Cards/s6.png"),
-		'7': preload("res://Assets/Textures/Cards/s7.png"),
-		'8': preload("res://Assets/Textures/Cards/s8.png"),
-		'9': preload("res://Assets/Textures/Cards/s9.png"),
-		'10': preload("res://Assets/Textures/Cards/s10.png"),
-		'J': preload("res://Assets/Textures/Cards/sJ.png"),
-		'Q': preload("res://Assets/Textures/Cards/sQ.png"),
-		'K': preload("res://Assets/Textures/Cards/sK.png"),		
-	},
-	'diamond': {
-		'2': preload("res://Assets/Textures/Cards/d2.png"),
-		'3': preload("res://Assets/Textures/Cards/d3.png"),
-		'4': preload("res://Assets/Textures/Cards/d4.png"),
-		'5': preload("res://Assets/Textures/Cards/d5.png"),
-		'6': preload("res://Assets/Textures/Cards/d6.png"),
-		'7': preload("res://Assets/Textures/Cards/d7.png"),
-		'8': preload("res://Assets/Textures/Cards/d8.png"),
-		'9': preload("res://Assets/Textures/Cards/d9.png"),
-		'10': preload("res://Assets/Textures/Cards/d10.png"),
-		'J': preload("res://Assets/Textures/Cards/dJ.png"),
-		'Q': preload("res://Assets/Textures/Cards/dQ.png"),
-		'K': preload("res://Assets/Textures/Cards/dK.png"),
-	},
-	'club': {
-		'2': preload("res://Assets/Textures/Cards/c2.png"),
-		'3': preload("res://Assets/Textures/Cards/c3.png"),
-		'4': preload("res://Assets/Textures/Cards/c4.png"),
-		'5': preload("res://Assets/Textures/Cards/c5.png"),
-		'6': preload("res://Assets/Textures/Cards/c6.png"),
-		'7': preload("res://Assets/Textures/Cards/c7.png"),
-		'8': preload("res://Assets/Textures/Cards/c8.png"),
-		'9': preload("res://Assets/Textures/Cards/c9.png"),
-		'10': preload("res://Assets/Textures/Cards/c10.png"),
-		'J': preload("res://Assets/Textures/Cards/cJ.png"),
-		'Q': preload("res://Assets/Textures/Cards/cQ.png"),
-		'K': preload("res://Assets/Textures/Cards/cK.png"),		
-	}
+const COLOR_TEXTURES: Dictionary = {
+	'hearts': 	preload('res://Assets/Textures/Cards/Colors/Hearts.png'),
+	'spades': 	preload("res://Assets/Textures/Cards/Colors/Spades.png"),
+	'clubs': 	preload("res://Assets/Textures/Cards/Colors/Clubs.png"),
+	'diamonds': preload("res://Assets/Textures/Cards/Colors/Diamonds.png")
 }
+
+
+const VALUE_TEXTURES: Dictionary = {
+	'A': 	preload("res://Assets/Textures/Cards/Numbers/Ace.png"),
+	'2': 	preload("res://Assets/Textures/Cards/Numbers/2.png"),
+	'3': 	preload("res://Assets/Textures/Cards/Numbers/3.png"),
+	'4': 	preload("res://Assets/Textures/Cards/Numbers/4.png"),
+	'5': 	preload("res://Assets/Textures/Cards/Numbers/5.png"),
+	'6': 	preload("res://Assets/Textures/Cards/Numbers/6.png"),
+	'7': 	preload("res://Assets/Textures/Cards/Numbers/7.png"),
+	'8': 	preload("res://Assets/Textures/Cards/Numbers/8.png"),
+	'9': 	preload("res://Assets/Textures/Cards/Numbers/9.png"),
+	'10': 	preload("res://Assets/Textures/Cards/Numbers/10.png"),
+	'J': 	preload("res://Assets/Textures/Cards/Numbers/J.png"),
+	'Q': 	preload("res://Assets/Textures/Cards/Numbers/Q.png"),
+	'K': 	preload("res://Assets/Textures/Cards/Numbers/K.png")
+}
+
+const TRUE_VALUES: Dictionary = {
+	'A': 14, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13
+}
+
+const CARD_MOVEMENT_SPEED: int = 10
 
 @onready var card_texture: Sprite2D = $CardTexture
 @onready var hitbox: Control = $CardTexture/Hitbox
+@onready var color_texture: TextureRect = $CardTexture/Control/Color
+@onready var value_texture: TextureRect = $CardTexture/Control/Value
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 
 var color: String
 var value: String
 
-var holder: CardHolder
+var holder: CardSlot
 
 var velocity = Vector2.ZERO
+
+var is_held: bool = false
 
 func set_value(color: String, value: String):
 	self.color = color
 	self.value = value
-	
-	if color in CARDS_TEXTURES.keys() and value in CARDS_TEXTURES.get(color):
-		card_texture.texture = CARDS_TEXTURES.get(color).get(value)
-	else:
-		card_texture.texture = preload("res://Assets/Textures/Cards/BaseCard.png")
-	
-	
+
+
 func _process(delta: float) -> void:
-	velocity = Vector2.ZERO
-	var distance_to_holder = sqrt((holder.position.x - position.x)**2 + (holder.position.y - position.y))
-	if distance_to_holder > 10:
-		velocity = Vector2()
+	if not is_held:
+		var distance_to_holder = sqrt((holder.global_position.x - global_position.x)**2 + (holder.global_position.y - global_position.y)**2)
+		
+		velocity /= 2
+		
+		velocity += Vector2(cos(get_angle_to(holder.global_position)) * distance_to_holder / 50, sin(get_angle_to(holder.global_position)) * distance_to_holder / 100)
+		position += velocity
+
+
+func update_scene():
+	if color in COLOR_TEXTURES.keys():
+		self.color_texture.texture = COLOR_TEXTURES.get(color)
+	if value in VALUE_TEXTURES.keys():
+		self.value_texture.texture = VALUE_TEXTURES.get(value)
+
+
+func get_true_value() -> int:
+	return TRUE_VALUES.get(value)
+
+
+func get_values():
+	return str(color, ':', value)
+
+
+func flip():
+	animation_player.play('card_flip')
+
+
+func unflip():
+	animation_player.play('card_unflip')

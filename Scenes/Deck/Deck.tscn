@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7sxef2x0m655"]
+[gd_scene load_steps=3 format=3 uid="uid://c7sxef2x0m655"]
 
 [ext_resource type="Script" path="res://Scenes/Deck/deck.gd" id="1_cdibq"]
+[ext_resource type="Texture2D" uid="uid://bnysa0vnpq51g" path="res://Assets/Textures/Cards/BaseCard.png" id="2_gtbre"]
 
 [node name="Deck" type="Node2D"]
 script = ExtResource("1_cdibq")
+card_texture = ExtResource("2_gtbre")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -21.5
+offset_top = 100.0
+offset_right = 21.5
+offset_bottom = 123.0
+grow_horizontal = 2
+text = "52/52"
