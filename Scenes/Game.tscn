@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://cl32jy727kw3s"]
+[gd_scene load_steps=17 format=3 uid="uid://cl32jy727kw3s"]
 
-[ext_resource type="Texture2D" uid="uid://ft54i6qnny7d" path="res://Assets/Textures/Backgrounds/green.png" id="1_8ulv1"]
 [ext_resource type="Script" path="res://Scenes/game.gd" id="1_mdgba"]
 [ext_resource type="PackedScene" uid="uid://lm22hoovbbpk" path="res://Scenes/Card/Card.tscn" id="2_yxcxn"]
 [ext_resource type="PackedScene" uid="uid://c7sxef2x0m655" path="res://Scenes/Deck/Deck.tscn" id="4_v21ev"]
@@ -8,6 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://seebvu4fhju3" path="res://Assets/Textures/Cards/Back.png" id="6_au6bq"]
 [ext_resource type="Script" path="res://Scenes/CardSlot/card_slot.gd" id="6_gwq6j"]
 [ext_resource type="PackedScene" uid="uid://csyq2aw6rm2fs" path="res://Scenes/ButtonCardSlot/ButtonCardSlot.tscn" id="6_ki7ov"]
+[ext_resource type="Texture2D" uid="uid://dm3iyy44vp3dy" path="res://Assets/Textures/Cards/Colors/Hearts.png" id="9_c0xd4"]
+[ext_resource type="Texture2D" uid="uid://b17xp1nxhby58" path="res://Assets/Textures/Cards/Colors/Clubs.png" id="10_k00t7"]
+[ext_resource type="Texture2D" uid="uid://dejg8x6ccl1x5" path="res://Assets/Textures/Cards/Colors/Spades.png" id="11_oetbu"]
+[ext_resource type="Texture2D" uid="uid://c6rjob03lkfvu" path="res://Assets/Textures/Cards/Colors/Diamonds.png" id="12_tn406"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xhgck"]
 font_size = 32
@@ -17,17 +20,33 @@ font_size = 64
 shadow_size = 15
 shadow_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_j3peq"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_bmksi"]
+font_size = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_o0hfc"]
+font_size = 64
+
 [node name="Game" type="Node2D"]
 script = ExtResource("1_mdgba")
 card_scene = ExtResource("2_yxcxn")
 deck_scene = ExtResource("4_v21ev")
 
-[node name="Sprite2D" type="TextureRect" parent="."]
+[node name="Sprite2D" type="ColorRect" parent="."]
 offset_right = 1920.0
 offset_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource("1_8ulv1")
+color = Color(0, 0.187449, 1.68458e-07, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 51.0
+offset_top = 48.0
+offset_right = 263.0
+offset_bottom = 71.0
+text = "TAB pour afficher les règles"
 
 [node name="StartGame" type="Button" parent="."]
 offset_left = 343.0
@@ -147,7 +166,163 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.243137, 0.243137, 0.243137, 0.631373)
+color = Color(0.0588235, 0.141176, 0.0588235, 0.890196)
+
+[node name="Title" type="Label" parent="RulesArea/ColorRect"]
+layout_mode = 0
+offset_left = 101.0
+offset_top = 21.0
+offset_right = 673.0
+offset_bottom = 66.0
+text = "Les règles (faites à l'arrache mais tkt)"
+label_settings = SubResource("LabelSettings_j3peq")
+
+[node name="Intro" type="Control" parent="RulesArea/ColorRect"]
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 100.0
+offset_right = 90.0
+offset_bottom = 140.0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="RulesArea/ColorRect/Intro"]
+layout_mode = 0
+offset_right = 948.0
+offset_bottom = 80.0
+
+[node name="Label" type="Label" parent="RulesArea/ColorRect/Intro/HFlowContainer"]
+layout_mode = 2
+text = "Bienvenue sur Scoundrel !"
+
+[node name="Label2" type="Label" parent="RulesArea/ColorRect/Intro/HFlowContainer"]
+layout_mode = 2
+text = "C'est un jeu de cartes Roguelike / Solitaire / Dungeon Crawler où faut taper du monstre, gérer sa santé, et son équipement.
+Et tout ça avec un paquet classique de 52 cartes !
+
+L'objectif sera de complètement vider la pioche. Tout simplement !
+
+Par défaut (et surtout, pour l'instant), la pioche est constituée des 52 cartes d'un jeu classique de carte, SAUF le valet, la dame, le roi et l'As de Coeur (on y reviendra).
+
+Et surtout, l'objectif c'est de ne pas mourir face aux ennemis féroces !
+
+Pour avancer dans le jeu, vous allez devoir avancer de salle en salle, comme dans un donjon dans un jeu-vidéo. Dans ces salles, vous pourrez trouver :
+- Des armes
+- Du soin
+- Des ennemis
+Et des fois tout en même temps !
+Tout ça, représenté par des cartes, comme expliqué à la page suivante.
+
+Ces salles, elles sont représentées par 4 cartes, disposées sur votre écran (vous verrez, c'est magique quand on clique sur \"Start a game\" ça le fait tout seul).
+
+Pour avancer de salle (et donc pour gagner si vous avez bien suivi), il y a deux possibilités :
+   1. Soit vous utilisez / consommez 3 sur les 4 cartes de votre salle actuelle, dans ce cas les 3 emplacements vides vont se re-remplir, et bravo vous avez passé une salle ;
+   2. Soit vous avez la possibilité de fuir votre salle actuelle. Quand vous fuyez, les cartes de votre salle actuelle sont placées (dans un ordre aléatoire) à la fin de la pioche.
+C'est donc une fuite temporaire, si vous fuyez des gros gros ennemis, bah ils vont revenir vous faire chier plus tard dans la partie.
+Vous pouvez aussi faire une fuite stratégique, si vous avez un bon équipement pour l'instant et que vous voulez pas utiliser l'équipement de votre salle actuelle.
+Comme ça, tout le bon loot sera déplacé à la fin du donjon !
+
+Par contre faites gaffe avec les fuites, vous pouvez pas fuir 2 salles d'affilée. Si vous fuyez une salle, la prochaine salle devra être passée avec la première méthode !
+
+A chaque carte utilisée, le compteur de cartes restantes diminue. Quand il atteint 0, c'est gagné !!!!!!
+
+Au fait, le truc \"Seed\" marche pas, faites comme si il était pas là
+
+PASSEZ A LA PAGE SUIVANTE POUR VOIR L'EXPLICATION DES COULEURS, MAINTENANT LA"
+
+[node name="Label3" type="Label" parent="RulesArea/ColorRect/Intro/HFlowContainer"]
+layout_mode = 2
+text = "hihi on peut bouger les cartes face visibles quand on reste cliqué dessus et après quand on les lâche eh bah elles retournent à leur place et moi je trouve ça vraiment pas mal ça m'a pris beaucoup plus de temps que ce que je pensais"
+label_settings = SubResource("LabelSettings_bmksi")
+
+[node name="Page2" type="Button" parent="RulesArea/ColorRect/Intro/HFlowContainer"]
+layout_mode = 2
+text = "Page 2 - Les couleurs des cartes"
+
+[node name="Colors" type="Control" parent="RulesArea/ColorRect"]
+visible = false
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 100.0
+offset_right = 90.0
+offset_bottom = 140.0
+
+[node name="HFlowContainer3" type="HFlowContainer" parent="RulesArea/ColorRect/Colors"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="RulesArea/ColorRect/Colors/HFlowContainer3/HFlowContainer"]
+layout_mode = 2
+texture = ExtResource("9_c0xd4")
+
+[node name="Label" type="Label" parent="RulesArea/ColorRect/Colors/HFlowContainer3/HFlowContainer"]
+layout_mode = 2
+text = "Les cartes de coeur ! A la surprise générale, les cartes coeur permettent de regagner de la vie ! Eh oui !
+Quand vous récupérez une carte coeur dans une salle, voyez ça comme une potion de soin, vous regagnerez autant de PV que la valeur de la carte en question.
+Par exemple, un 7 de coeur vous redonne 7pv (au fait ! y'a pas de valet, dame, roi et as de coeur héhé)
+Et la vie est toujours maxée à 20."
+
+[node name="Enemies" type="HFlowContainer" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Enemies"]
+layout_mode = 2
+texture = ExtResource("10_k00t7")
+
+[node name="TextureRect2" type="TextureRect" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Enemies"]
+layout_mode = 2
+texture = ExtResource("11_oetbu")
+
+[node name="Label" type="Label" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Enemies"]
+layout_mode = 2
+text = "Les cartes de pique et de trèfle ! Attention là ça devient sérieux. C'est les gros méchants, les ennemis.
+Imaginez que c'est des monstres dans votre pièce. Plus leur valeur est grosse, plus ils sont méchants (de 2 à 10 pour les cartes numérotées, valet: 11, dame: 12, roi: 13, As: 14)
+Si vous tombez sur une salle avec que des gros gros monstres, oulala ça serait intelligent de partir, à part si votre équipement vous permet de les battre !
+
+Pour affronter un monstre, appuyer simplement sur le bouton \"Use\" en dessous. De base, si vous avez pas d'arme, le monstre vous fera autant de dégâts que sa valeur.
+Au fait vous êtes super forts, dans tous les cas le monstre contre qui vous vous battez se fera tuer dans votre combat, y'a plus qu'à faire en sorte de pas crever en même temps :))"
+
+[node name="Diamonds" type="HFlowContainer" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Diamonds"]
+layout_mode = 2
+texture = ExtResource("12_tn406")
+
+[node name="Label" type="Label" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Diamonds"]
+layout_mode = 2
+text = "Les cartes de carreau ! Ce sont vos armes ! Les trucs pour taper d'autres trucs ! Quand vous récupérez une carte carreau dans une salle, vous allez l'équiper (elle va se mettre toute seule en bas de l'écran).
+A partir de ce moment là, les ennemis que vous allez combattre vont vous faire beaucoup moins de dégâts.
+Quand vous tuez un monstre avec une arme, on retire aux dégâts infligés par le monstre (la valeur de la carte du monstre) les dégâts que font l'arme. (de 2 à 10 pour les cartes numérotées,
+11 pour le valet, 12 pour la dame, 13 pour le roi et 14 pour l'As.)
+    Mais c'est pas super facile pour autant, vous allez pas gagner juste parce que vous récupérez l'As de carreau. Pour le premier monstre tué par une arme, vous avez pas de limite, tapez qui vous voulez. 
+Par contre, tous les prochains monstres tués par votre arme devront avoir une valeur inférieure à la valeur du dernier monstre tué ! Et cette valeur se met à jour à chaque nouveau monstre tué !
+
+Imaginons que j'ai tué un valet de pique avec mon 10 de carreau. Le monstre m'a fait 1 de dégât (11 - 10). Les prochains monstres que je peux tuer devront avoir une valeur au maximum égale à 9.
+Si je tue un 4 de pique avec cette même arme, tout va bien, 4 est inférieur à 9, donc je prends pas de dégâts, mais le prochain monstre devra obligatoirement être un 3 ou un 2 !!!!
+Si vous devez taper un monstre trop puissant (plus puissant que le dernier monstre tué par votre arme) alors l'arme ne sert à rien et vous prenez tous les dégâts."
+
+[node name="Button" type="Button" parent="RulesArea/ColorRect/Colors/HFlowContainer3/Diamonds/Label"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Label" type="Label" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+text = "
+Voilà c'est tout ce que y'a à savoir, c'était sûrement pas clair, mais bon courage essayez, c'est le meilleur moyen de comprendre !!"
+
+[node name="Page1" type="Button" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+text = "Page 1 - L'intro"
+
+[node name="Label2" type="Label" parent="RulesArea/ColorRect/Colors/HFlowContainer3"]
+layout_mode = 2
+text = "
+TAB POUR FERMER L'ECRAN DES REGLES"
+label_settings = SubResource("LabelSettings_o0hfc")
 
 [connection signal="pressed" from="StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot" to="." method="_on_drawing_slot_card_used"]
@@ -155,3 +330,5 @@ color = Color(0.243137, 0.243137, 0.243137, 0.631373)
 [connection signal="card_used" from="DrawingSlots/DrawingSlot3" to="." method="_on_drawing_slot_3_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot4" to="." method="_on_drawing_slot_4_card_used"]
 [connection signal="pressed" from="RunAway" to="." method="_on_run_away_pressed"]
+[connection signal="pressed" from="RulesArea/ColorRect/Intro/HFlowContainer/Page2" to="." method="_on_page_2_pressed"]
+[connection signal="pressed" from="RulesArea/ColorRect/Colors/HFlowContainer3/Page1" to="." method="_on_page_1_pressed"]

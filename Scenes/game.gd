@@ -21,6 +21,24 @@ class_name Game
 @onready var cards: Node2D = $Cards
 @onready var bin: Node2D = $Bin
 
+@onready var rules_area: Control = $RulesArea
+@onready var intro: Control = $RulesArea/ColorRect/Intro
+@onready var colors: Control = $RulesArea/ColorRect/Colors
+
+var show_rules: bool = false
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_rules"):
+		show_rules = !show_rules
+		
+		if show_rules:
+			rules_area.show()
+			colors.hide()
+			intro.show()
+		else:
+			rules_area.hide()
+
+
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 var weapon_slots: Array[CardSlot] = []
@@ -281,3 +299,13 @@ func lose():
 	lock_slots()
 	lock_run_away()
 	message.text = "Trrop nul cest rater 😁"
+
+
+func _on_page_2_pressed() -> void:
+	intro.hide()
+	colors.show()
+
+
+func _on_page_1_pressed() -> void:
+	intro.show()
+	colors.hide()
