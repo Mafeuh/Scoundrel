@@ -29,6 +29,8 @@ const TRUE_VALUES: Dictionary = {
 	'A': 14, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13
 }
 
+const FLIP_SOUND = preload("res://Assets/Audio/SFX/card_flip.wav")
+
 const CARD_MOVEMENT_SPEED: int = 10
 
 @onready var card_texture: Sprite2D = $CardTexture
@@ -36,6 +38,7 @@ const CARD_MOVEMENT_SPEED: int = 10
 @onready var color_texture: TextureRect = $CardTexture/Control/Color
 @onready var value_texture: TextureRect = $CardTexture/Control/Value
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var flip_card_sound: AudioStreamPlayer = $AudioStreamPlayer
 
 
 var color: String
@@ -47,6 +50,13 @@ var velocity = Vector2.ZERO
 
 var is_held: bool = false
 
+
+func _ready() -> void:
+	flip_card_sound = AudioStreamPlayer.new()
+	flip_card_sound.stream = FLIP_SOUND
+	update_scene()
+
+
 func set_value(color: String, value: String):
 	self.color = color
 	self.value = value
@@ -56,9 +66,8 @@ func _process(delta: float) -> void:
 	if not is_held:
 		var distance_to_holder = sqrt((holder.global_position.x - global_position.x)**2 + (holder.global_position.y - global_position.y)**2)
 		
-		velocity /= 2
-		
-		velocity += Vector2(cos(get_angle_to(holder.global_position)) * distance_to_holder / 50, sin(get_angle_to(holder.global_position)) * distance_to_holder / 100)
+		velocity /= 1.5
+		velocity += Vector2(cos(get_angle_to(holder.global_position)) * distance_to_holder / 25, sin(get_angle_to(holder.global_position)) * distance_to_holder / 50)
 		position += velocity
 
 
@@ -79,7 +88,9 @@ func get_values():
 
 func flip():
 	animation_player.play('card_flip')
+	flip_card_sound.play()
 
 
 func unflip():
 	animation_player.play('card_unflip')
+	flip_card_sound.play()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cl32jy727kw3s"]
+[gd_scene load_steps=8 format=3 uid="uid://cl32jy727kw3s"]
 
 [ext_resource type="Texture2D" uid="uid://ft54i6qnny7d" path="res://Assets/Textures/Backgrounds/green.png" id="1_8ulv1"]
 [ext_resource type="Script" path="res://Scenes/game.gd" id="1_mdgba"]
@@ -6,21 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://c7sxef2x0m655" path="res://Scenes/Deck/Deck.tscn" id="4_v21ev"]
 [ext_resource type="PackedScene" uid="uid://da05cm8dyj15s" path="res://Scenes/CardSlot/CardSlot.tscn" id="6_6n1nc"]
 [ext_resource type="Texture2D" uid="uid://seebvu4fhju3" path="res://Assets/Textures/Cards/Back.png" id="6_au6bq"]
-[ext_resource type="Script" path="res://Scenes/CardSlot/card_slot.gd" id="6_gwq6j"]
 [ext_resource type="PackedScene" uid="uid://csyq2aw6rm2fs" path="res://Scenes/ButtonCardSlot/ButtonCardSlot.tscn" id="6_ki7ov"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_xhgck"]
-font_size = 32
-
-[sub_resource type="LabelSettings" id="LabelSettings_tf255"]
-font_size = 64
-shadow_size = 15
-shadow_color = Color(0, 0, 0, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_mdgba")
 card_scene = ExtResource("2_yxcxn")
-deck_scene = ExtResource("4_v21ev")
+base_health = null
 
 [node name="Sprite2D" type="TextureRect" parent="."]
 offset_right = 1920.0
@@ -36,56 +27,9 @@ offset_right = 511.0
 offset_bottom = 81.0
 text = "Start a game"
 
-[node name="Remaining" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 544.0
-offset_top = 13.0
-offset_right = 584.0
-offset_bottom = 53.0
-
-[node name="Label" type="Label" parent="Remaining"]
-layout_mode = 0
-offset_right = 136.0
-offset_bottom = 23.0
-text = "Cartes restantes :"
-
-[node name="NBCartes" type="Label" parent="Remaining"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 21.0
-offset_right = 118.0
-offset_bottom = 66.0
-label_settings = SubResource("LabelSettings_xhgck")
-
-[node name="SeedArea" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 352.0
-offset_top = 7.0
-offset_right = 392.0
-offset_bottom = 47.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="SeedArea"]
-layout_mode = 0
-offset_right = 133.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="SeedArea/HBoxContainer"]
-layout_mode = 2
-text = "Seed: "
-
-[node name="SeedInput" type="SpinBox" parent="SeedArea/HBoxContainer"]
-layout_mode = 2
-min_value = -1.0
-max_value = 100000.0
-
 [node name="Deck" parent="." instance=ExtResource("4_v21ev")]
 position = Vector2(124, 214)
 card_texture = ExtResource("6_au6bq")
-
-[node name="BackToDeckSlot" type="Node2D" parent="Deck"]
-script = ExtResource("6_gwq6j")
 
 [node name="HealthLabel" type="Label" parent="."]
 offset_left = 92.0
@@ -119,39 +63,8 @@ position = Vector2(123, 179)
 [node name="Bin" type="Node2D" parent="."]
 position = Vector2(1131, 731)
 
-[node name="RunAway" type="Button" parent="."]
-offset_left = 892.0
-offset_top = 242.0
-offset_right = 980.0
-offset_bottom = 273.0
-text = "Run away!"
-
-[node name="Message" type="Label" parent="."]
-offset_left = 222.0
-offset_top = 492.0
-offset_right = 262.0
-offset_bottom = 515.0
-label_settings = SubResource("LabelSettings_tf255")
-
-[node name="RulesArea" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-
-[node name="ColorRect" type="ColorRect" parent="RulesArea"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.243137, 0.243137, 0.243137, 0.631373)
-
 [connection signal="pressed" from="StartGame" to="." method="_on_start_game_pressed"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot" to="." method="_on_drawing_slot_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot2" to="." method="_on_drawing_slot_2_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot3" to="." method="_on_drawing_slot_3_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot4" to="." method="_on_drawing_slot_4_card_used"]
-[connection signal="pressed" from="RunAway" to="." method="_on_run_away_pressed"]
