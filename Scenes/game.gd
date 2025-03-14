@@ -5,10 +5,10 @@ class_name Game
 @export var deck_scene: PackedScene
 @onready var message: Label = $Message
 @onready var nb_cartes: Label = $Remaining/NBCartes
+@onready var confrontation: Node2D = $Confrontation
 
 @onready var deck: Deck = $Deck
 @onready var health_label: Label = $HealthLabel
-@onready var weapon_area: Node2D = $WeaponArea
 @onready var back_to_deck_slot: CardSlot = $Deck/BackToDeckSlot
 @onready var run_away_button: Button = $RunAway
 
@@ -41,8 +41,6 @@ func _input(event: InputEvent) -> void:
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
-var weapon_slots: Array[CardSlot] = []
-
 var used_cards_amount: int
 
 var drawing_slots: Array[ButtonCardSlot] = []
@@ -54,28 +52,7 @@ var health: int:
 		return health
 	set(value):
 		health = value
-		health_label.text = str("Vie: ", health, ' / ', base_health)
-
-
-func new_weapon(new_weapon: Card):
-	if weapon_slots.size() > 0:
-		cards.remove_child(get_weapon_slot().remove_card())
-		reset_weapon()
-	
-	weapon_slots.clear()
-	for child: CardSlot in weapon_area.get_children():
-		trash_card(child.card)
-		weapon_area.remove_child(child)
-	
-	var new_slot = CardSlot.new()
-	weapon_slots.append(new_slot)
-	weapon_area.add_child(new_slot)
-	
-	get_weapon_slot().set_card(new_weapon)
-	var next_slot = CardSlot.new()
-	next_slot.position = get_weapon_slot().position + Vector2(70, 10)
-	weapon_slots.append(next_slot)
-	weapon_area.add_child(next_slot)	
+		health_label.text = str("Vie: ", health, ' / ', base_health)	
 	
 
 func _ready() -> void:
@@ -87,15 +64,17 @@ func _ready() -> void:
 
 
 func start_game() -> void:
+	lock_run_away()
+	lock_slots()
+	
+	message.text = ''
+	
 	deck = deck_scene.instantiate()
 	rng = RandomNumberGenerator.new()
-	rng.seed = seed_input.value
 	deck.set_rng(self.rng)
 	
 	health = base_health
-	
-	reset_weapon()
-	
+		
 	for card in cards.get_children():
 		cards.remove_child(card)
 	
@@ -106,6 +85,7 @@ func start_game() -> void:
 	nb_cartes.text = str(deck.total_cards - used_cards_amount, ' / ', deck.total_cards)
 
 	refill()
+	unlock_run_away()
 
 
 func use_card_from_slot_index(index: int):
@@ -130,19 +110,8 @@ func use_card(card: Card):
 		new_weapon(card)
 	
 	if card.color in ['spades', 'clubs']:
-		var true_card_value: int = card.get_true_value()
-		var damage_taken: int 
-		if card.get_true_value() < get_last_enemy_value():
-			damage_taken = max(0, true_card_value - get_weapon_strength())
-		else:
-			damage_taken = true_card_value
-		health = max(0, health - damage_taken)
-		
-		var weapon_slot = weapon_slots[0]
-		if weapon_slot.has_card() and card.get_true_value() < get_last_enemy_value():
-			add_card_to_weapon_queue(card)
-		else:
-			trash_card(card)
+		var result = await confrontation.fight_enemy(card)
+		health = max(0, health - result)
 	
 	if card.color == 'hearts':
 		var true_card_value: int = card.get_true_value()
@@ -160,17 +129,6 @@ func use_card(card: Card):
 		unlock_run_away()
 
 
-func add_card_to_weapon_queue(card: Card):
-	var slot = weapon_slots[weapon_slots.size() - 1]
-	slot.set_card(card)
-	card.holder = slot
-	
-	var next_slot = CardSlot.new()
-	next_slot.position = slot.position + Vector2(10, 10)
-	weapon_slots.append(next_slot)
-	weapon_area.add_child(next_slot)
-
-
 func refill():
 	lock_slots()
 	for slot in drawing_slots:
@@ -183,20 +141,6 @@ func refill():
 				
 				await get_tree().create_timer(0.2).timeout
 	unlock_slots()
-
-
-func get_weapon_strength() -> int:
-	if get_weapon_slot() != null and get_weapon_slot().card == null:
-		return 0
-	else:
-		return get_weapon_slot().card.get_true_value()
-
-
-func get_last_enemy_value() -> int:
-	if weapon_slots.size() - 1 <= 1:
-		return 15
-	else:
-		return weapon_slots[weapon_slots.size() - 2].card.get_true_value()
 
 
 func _on_start_game_pressed() -> void:
@@ -219,10 +163,6 @@ func _on_drawing_slot_4_card_used(slot: ButtonCardSlot, card: Card) -> void:
 	use_card_from_slot_index(3)
 
 
-func get_weapon_slot():
-	return weapon_slots[0] if weapon_slots.size() > 0 else CardSlot.new()
-
-
 func lock_slots():
 	for slot in drawing_slots:
 		slot.button.disabled = true
@@ -235,6 +175,7 @@ func unlock_slots():
 
 func trash_card(card: Card):
 	if card != null:
+		card.holder.card = null
 		card.unflip()
 		var slot = CardSlot.new()
 		bin.add_child(slot)
@@ -242,17 +183,6 @@ func trash_card(card: Card):
 		slot.position.y = rng.randi_range(-10, 10)
 		card.holder = slot
 		slot.set_card(card)
-
-
-func reset_weapon():
-	for slot in weapon_slots:
-		trash_card(slot.card)
-		weapon_area.remove_child(slot)
-	weapon_slots.clear()
-	
-	var slot: CardSlot = CardSlot.new()
-	weapon_area.add_child(slot)
-	weapon_slots.append(slot)
 
 
 func run_away():
@@ -309,3 +239,29 @@ func _on_page_2_pressed() -> void:
 func _on_page_1_pressed() -> void:
 	intro.show()
 	colors.hide()
+
+
+func new_weapon(card: Card):
+	trash_card(confrontation.get_weapon())
+	
+	var slayed_enemies = confrontation.get_slayed_enemies()
+	
+	for enemy in slayed_enemies:
+		trash_card(enemy)
+		await get_tree().create_timer(0.1).timeout
+		
+	confrontation.new_weapon(card)
+
+
+func _on_confrontation_card_trashed(card: Card) -> void:
+	trash_card(card)
+
+
+func _on_confrontation_fight_started() -> void:
+	lock_slots()
+	lock_run_away()
+
+
+func _on_confrontation_fight_ended() -> void:
+	unlock_slots()
+	unlock_run_away()

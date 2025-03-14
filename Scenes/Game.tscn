@@ -1,12 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://cl32jy727kw3s"]
+[gd_scene load_steps=19 format=3 uid="uid://cl32jy727kw3s"]
 
-[ext_resource type="Script" path="res://Scenes/game.gd" id="1_mdgba"]
+[ext_resource type="Script" uid="uid://dr28car651l1j" path="res://Scenes/game.gd" id="1_mdgba"]
 [ext_resource type="PackedScene" uid="uid://lm22hoovbbpk" path="res://Scenes/Card/Card.tscn" id="2_yxcxn"]
+[ext_resource type="Texture2D" uid="uid://b1otgbl8ardh3" path="res://Assets/Textures/Backgrounds/Default.png" id="4_3so38"]
 [ext_resource type="PackedScene" uid="uid://c7sxef2x0m655" path="res://Scenes/Deck/Deck.tscn" id="4_v21ev"]
-[ext_resource type="PackedScene" uid="uid://da05cm8dyj15s" path="res://Scenes/CardSlot/CardSlot.tscn" id="6_6n1nc"]
 [ext_resource type="Texture2D" uid="uid://seebvu4fhju3" path="res://Assets/Textures/Cards/Back.png" id="6_au6bq"]
-[ext_resource type="Script" path="res://Scenes/CardSlot/card_slot.gd" id="6_gwq6j"]
+[ext_resource type="Script" uid="uid://b80ulirlqm1uq" path="res://Scenes/CardSlot/card_slot.gd" id="6_gwq6j"]
 [ext_resource type="PackedScene" uid="uid://csyq2aw6rm2fs" path="res://Scenes/ButtonCardSlot/ButtonCardSlot.tscn" id="6_ki7ov"]
+[ext_resource type="PackedScene" uid="uid://5gk7k6wlo3mu" path="res://Scenes/Confrontation/Confrontation.tscn" id="7_7vtst"]
 [ext_resource type="Texture2D" uid="uid://dm3iyy44vp3dy" path="res://Assets/Textures/Cards/Colors/Hearts.png" id="9_c0xd4"]
 [ext_resource type="Texture2D" uid="uid://b17xp1nxhby58" path="res://Assets/Textures/Cards/Colors/Clubs.png" id="10_k00t7"]
 [ext_resource type="Texture2D" uid="uid://dejg8x6ccl1x5" path="res://Assets/Textures/Cards/Colors/Spades.png" id="11_oetbu"]
@@ -14,6 +15,12 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_xhgck"]
 font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_gax78"]
+font_size = 32
+font_color = Color(1, 0, 0, 1)
+outline_size = 7
+outline_color = Color(0.592448, 2.20198e-06, 4.33177e-07, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tf255"]
 font_size = 64
@@ -34,18 +41,18 @@ script = ExtResource("1_mdgba")
 card_scene = ExtResource("2_yxcxn")
 deck_scene = ExtResource("4_v21ev")
 
-[node name="Sprite2D" type="ColorRect" parent="."]
+[node name="Sprite2D" type="TextureRect" parent="."]
 offset_right = 1920.0
 offset_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color(0, 0.187449, 1.68458e-07, 1)
+texture = ExtResource("4_3so38")
 
 [node name="Label" type="Label" parent="."]
-offset_left = 51.0
-offset_top = 48.0
-offset_right = 263.0
-offset_bottom = 71.0
+offset_left = 805.0
+offset_top = 42.0
+offset_right = 1017.0
+offset_bottom = 65.0
 text = "TAB pour afficher les règles"
 
 [node name="StartGame" type="Button" parent="."]
@@ -77,28 +84,6 @@ offset_right = 118.0
 offset_bottom = 66.0
 label_settings = SubResource("LabelSettings_xhgck")
 
-[node name="SeedArea" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 352.0
-offset_top = 7.0
-offset_right = 392.0
-offset_bottom = 47.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="SeedArea"]
-layout_mode = 0
-offset_right = 133.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="SeedArea/HBoxContainer"]
-layout_mode = 2
-text = "Seed: "
-
-[node name="SeedInput" type="SpinBox" parent="SeedArea/HBoxContainer"]
-layout_mode = 2
-min_value = -1.0
-max_value = 100000.0
-
 [node name="Deck" parent="." instance=ExtResource("4_v21ev")]
 position = Vector2(124, 214)
 card_texture = ExtResource("6_au6bq")
@@ -107,14 +92,16 @@ card_texture = ExtResource("6_au6bq")
 script = ExtResource("6_gwq6j")
 
 [node name="HealthLabel" type="Label" parent="."]
-offset_left = 92.0
-offset_top = 79.0
-offset_right = 249.0
-offset_bottom = 102.0
+offset_left = 80.0
+offset_top = 42.0
+offset_right = 237.0
+offset_bottom = 87.0
+text = "a"
+label_settings = SubResource("LabelSettings_gax78")
 horizontal_alignment = 1
 
 [node name="DrawingSlots" type="Node2D" parent="."]
-position = Vector2(272, 250)
+position = Vector2(500, 250)
 
 [node name="DrawingSlot" parent="DrawingSlots" instance=ExtResource("6_ki7ov")]
 
@@ -127,10 +114,8 @@ position = Vector2(300, 0)
 [node name="DrawingSlot4" parent="DrawingSlots" instance=ExtResource("6_ki7ov")]
 position = Vector2(450, 0)
 
-[node name="WeaponArea" type="Node2D" parent="."]
-position = Vector2(364, 731)
-
-[node name="CardSlot" parent="WeaponArea" instance=ExtResource("6_6n1nc")]
+[node name="Confrontation" parent="." instance=ExtResource("7_7vtst")]
+position = Vector2(739, 596)
 
 [node name="Cards" type="Node2D" parent="."]
 position = Vector2(123, 179)
@@ -139,9 +124,9 @@ position = Vector2(123, 179)
 position = Vector2(1131, 731)
 
 [node name="RunAway" type="Button" parent="."]
-offset_left = 892.0
+offset_left = 1200.0
 offset_top = 242.0
-offset_right = 980.0
+offset_right = 1288.0
 offset_bottom = 273.0
 text = "Run away!"
 
@@ -329,6 +314,9 @@ label_settings = SubResource("LabelSettings_o0hfc")
 [connection signal="card_used" from="DrawingSlots/DrawingSlot2" to="." method="_on_drawing_slot_2_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot3" to="." method="_on_drawing_slot_3_card_used"]
 [connection signal="card_used" from="DrawingSlots/DrawingSlot4" to="." method="_on_drawing_slot_4_card_used"]
+[connection signal="card_trashed" from="Confrontation" to="." method="_on_confrontation_card_trashed"]
+[connection signal="fight_ended" from="Confrontation" to="." method="_on_confrontation_fight_ended"]
+[connection signal="fight_started" from="Confrontation" to="." method="_on_confrontation_fight_started"]
 [connection signal="pressed" from="RunAway" to="." method="_on_run_away_pressed"]
 [connection signal="pressed" from="RulesArea/ColorRect/Intro/HFlowContainer/Page2" to="." method="_on_page_2_pressed"]
 [connection signal="pressed" from="RulesArea/ColorRect/Colors/HFlowContainer3/Page1" to="." method="_on_page_1_pressed"]

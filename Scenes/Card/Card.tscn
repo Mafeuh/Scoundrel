@@ -1,11 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://lm22hoovbbpk"]
+[gd_scene load_steps=13 format=3 uid="uid://lm22hoovbbpk"]
 
-[ext_resource type="Script" path="res://Scenes/Card/card.gd" id="1_o0y84"]
+[ext_resource type="Script" uid="uid://b5odq52ddancq" path="res://Scenes/Card/card.gd" id="1_o0y84"]
 [ext_resource type="Texture2D" uid="uid://bnysa0vnpq51g" path="res://Assets/Textures/Cards/BaseCard.png" id="2_cm3sh"]
 [ext_resource type="Texture2D" uid="uid://seebvu4fhju3" path="res://Assets/Textures/Cards/Back.png" id="2_kaaoa"]
-[ext_resource type="Script" path="res://Scenes/Card/card_texture.gd" id="3_j0m2m"]
+[ext_resource type="Script" uid="uid://s0lv6py3t7xv" path="res://Scenes/Card/card_texture.gd" id="3_j0m2m"]
 [ext_resource type="Texture2D" uid="uid://dm3iyy44vp3dy" path="res://Assets/Textures/Cards/Colors/Hearts.png" id="3_tqwbw"]
 [ext_resource type="Texture2D" uid="uid://dnut4hthmgnhn" path="res://Assets/Textures/Cards/Numbers/8.png" id="4_fp3yl"]
+[ext_resource type="Texture2D" uid="uid://l38kqxnwiv" path="res://Assets/Textures/Cards/Colors/HeartsSmall.png" id="7_3hndw"]
+[ext_resource type="Texture2D" uid="uid://du8fsucvysb3v" path="res://Assets/Textures/Cards/Numbers/AceSmall.png" id="8_l3bjr"]
 
 [sub_resource type="Animation" id="Animation_fgptu"]
 length = 0.001
@@ -56,6 +58,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_42fru"]
@@ -162,9 +176,9 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rx6or"]
 _data = {
-"RESET": SubResource("Animation_fgptu"),
-"card_flip": SubResource("Animation_42fru"),
-"card_unflip": SubResource("Animation_vfen4")
+&"RESET": SubResource("Animation_fgptu"),
+&"card_flip": SubResource("Animation_42fru"),
+&"card_unflip": SubResource("Animation_vfen4")
 }
 
 [node name="Card" type="Node2D"]
@@ -196,9 +210,9 @@ anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -32.0
-offset_top = 17.0
+offset_top = 25.0
 offset_right = 32.0
-offset_bottom = 81.0
+offset_bottom = 89.0
 grow_horizontal = 2
 texture = ExtResource("3_tqwbw")
 
@@ -219,9 +233,59 @@ texture = ExtResource("4_fp3yl")
 expand_mode = 5
 stretch_mode = 3
 
+[node name="ColorSmallTL" type="TextureRect" parent="CardTexture/Control"]
+layout_mode = 1
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 21.0
+offset_bottom = 20.0
+texture = ExtResource("7_3hndw")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="ValueSmallBR" type="TextureRect" parent="CardTexture/Control"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 104.0
+offset_right = 92.0
+offset_bottom = 119.0
+texture = ExtResource("8_l3bjr")
+expand_mode = 5
+stretch_mode = 3
+flip_h = true
+flip_v = true
+
+[node name="ValueSmallTL" type="TextureRect" parent="CardTexture/Control"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 22.0
+offset_right = 18.0
+offset_bottom = 37.0
+texture = ExtResource("8_l3bjr")
+expand_mode = 5
+stretch_mode = 3
+
+[node name="ColorSmallBR" type="TextureRect" parent="CardTexture/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -21.0
+offset_top = -20.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("7_3hndw")
+expand_mode = 1
+stretch_mode = 2
+flip_v = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_rx6or")
+&"": SubResource("AnimationLibrary_rx6or")
 }
 
 [node name="FlipCardSound" type="AudioStreamPlayer" parent="."]

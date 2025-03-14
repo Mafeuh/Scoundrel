@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://csyq2aw6rm2fs"]
 
-[ext_resource type="Script" path="res://Scenes/ButtonCardSlot/button_card_slot.gd" id="1_j2j0w"]
-[ext_resource type="Script" path="res://Scenes/CardSlot/card_slot.gd" id="1_k1dk8"]
+[ext_resource type="Script" uid="uid://3mydkjug0vve" path="res://Scenes/ButtonCardSlot/button_card_slot.gd" id="1_j2j0w"]
+[ext_resource type="Script" uid="uid://b80ulirlqm1uq" path="res://Scenes/CardSlot/card_slot.gd" id="1_k1dk8"]
 
 [node name="ButtonCardSlot" type="Node2D"]
 script = ExtResource("1_j2j0w")

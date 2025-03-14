@@ -5,7 +5,16 @@ const COLOR_TEXTURES: Dictionary = {
 	'hearts': 	preload('res://Assets/Textures/Cards/Colors/Hearts.png'),
 	'spades': 	preload("res://Assets/Textures/Cards/Colors/Spades.png"),
 	'clubs': 	preload("res://Assets/Textures/Cards/Colors/Clubs.png"),
-	'diamonds': preload("res://Assets/Textures/Cards/Colors/Diamonds.png")
+	'diamonds': preload("res://Assets/Textures/Cards/Colors/Diamonds.png"),
+	'bonus': 	preload("res://Assets/Textures/Cards/Colors/Bonus.png")
+}
+
+const COLOR_SMALL_TEXTURES: Dictionary = {
+	'hearts':	preload('res://Assets/Textures/Cards/Colors/HeartsSmall.png'),
+	'spades':	preload('res://Assets/Textures/Cards/Colors/SpadesSmall.png'),
+	'clubs': 	preload('res://Assets/Textures/Cards/Colors/ClubsSmall.png'),
+	'diamonds': preload('res://Assets/Textures/Cards/Colors/DiamondsSmall.png'),
+	'bonus': 	preload('res://Assets/Textures/Cards/Colors/BonusSmall.png')
 }
 
 
@@ -25,6 +34,22 @@ const VALUE_TEXTURES: Dictionary = {
 	'K': 	preload("res://Assets/Textures/Cards/Numbers/K.png")
 }
 
+const VALUE_SMALL_TEXTURES: Dictionary = {
+	'A': 	preload("res://Assets/Textures/Cards/Numbers/AceSmall.png"),
+	'2': 	preload("res://Assets/Textures/Cards/Numbers/2Small.png"),
+	'3': 	preload("res://Assets/Textures/Cards/Numbers/3Small.png"),
+	'4': 	preload("res://Assets/Textures/Cards/Numbers/4Small.png"),
+	'5': 	preload("res://Assets/Textures/Cards/Numbers/5Small.png"),
+	'6': 	preload("res://Assets/Textures/Cards/Numbers/6Small.png"),
+	'7': 	preload("res://Assets/Textures/Cards/Numbers/7Small.png"),
+	'8': 	preload("res://Assets/Textures/Cards/Numbers/8Small.png"),
+	'9': 	preload("res://Assets/Textures/Cards/Numbers/9Small.png"),
+	'10': 	preload("res://Assets/Textures/Cards/Numbers/10Small.png"),
+	'J': 	preload("res://Assets/Textures/Cards/Numbers/JSmall.png"),
+	'Q': 	preload("res://Assets/Textures/Cards/Numbers/QSmall.png"),
+	'K': 	preload("res://Assets/Textures/Cards/Numbers/KSmall.png")
+}
+
 const TRUE_VALUES: Dictionary = {
 	'A': 14, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 11, 'Q': 12, 'K': 13
 }
@@ -39,6 +64,10 @@ const CARD_MOVEMENT_SPEED: int = 10
 @onready var value_texture: TextureRect = $CardTexture/Control/Value
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var flip_card_sound: AudioStreamPlayer = $AudioStreamPlayer
+@onready var color_small_tl: TextureRect = $CardTexture/Control/ColorSmallTL
+@onready var value_small_br: TextureRect = $CardTexture/Control/ValueSmallBR
+@onready var value_small_tl: TextureRect = $CardTexture/Control/ValueSmallTL
+@onready var color_small_br: TextureRect = $CardTexture/Control/ColorSmallBR
 
 
 var color: String
@@ -74,9 +103,14 @@ func _process(delta: float) -> void:
 func update_scene():
 	if color in COLOR_TEXTURES.keys():
 		self.color_texture.texture = COLOR_TEXTURES.get(color)
+	if color in COLOR_SMALL_TEXTURES.keys():
+		self.color_small_tl.texture = COLOR_SMALL_TEXTURES.get(color)
+		self.color_small_br.texture = COLOR_SMALL_TEXTURES.get(color)
 	if value in VALUE_TEXTURES.keys():
 		self.value_texture.texture = VALUE_TEXTURES.get(value)
-
+	if value in VALUE_SMALL_TEXTURES.keys():
+		self.value_small_tl.texture = VALUE_SMALL_TEXTURES.get(value)
+		self.value_small_br.texture = VALUE_SMALL_TEXTURES.get(value)
 
 func get_true_value() -> int:
 	return TRUE_VALUES.get(value)
